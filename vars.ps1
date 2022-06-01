@@ -1,3 +1,3 @@
-$env:FLASK_APP="dashboard.py"
+$env:FLASK_APP="credit_aula.py"
 $env:SQLALCHEMY_DATABASE_URI="mysql://127.0.0.1:3306/devflix"
 $env:SQLALCHEMY_TRACK_MODIFICATIONS=0
