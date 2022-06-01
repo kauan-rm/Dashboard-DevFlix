@@ -1,0 +1,44 @@
+<div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+                <div class="sb-sidenav-menu-heading">Principal</div>
+                <a class="nav-link" href="{{ url_for('main.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-solid fa-house"></i></div>
+                    <div style="margin: auto;">
+                        Home
+                    </div>
+                </a>
+                <a class="nav-link" href="{{ url_for('main.cidades') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-solid fa-location-crosshairs"></i></div>
+                    <div style="margin: auto;">
+                        Cidades
+                    </div>
+                </a>
+                
+                <div class="sb-sidenav-menu-heading">Autenticação</div>
+                <a class="nav-link" href="{{ url_for('auth.login') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-solid fa-sign-in"></i></div>
+                    <div style="margin: auto;">
+                        Login
+                    </div>
+                </a>
+                <a class="nav-link" href="{{ url_for('auth.registro') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-solid fa-user-plus"></i></div>
+                    <div style="margin: auto;">
+                        Registro
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% if user %}
+        <div class="sb-sidenav-footer">
+            <div class="small">Logado como:</div>
+            {{ user }}
+            <div class="small text-center">
+                <span><a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-small" style="font-size: x-small;">Sair</a></span>
+            </div>
+        </div>
+        {% endif %}
+    </nav>
+</div>
