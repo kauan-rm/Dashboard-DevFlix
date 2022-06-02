@@ -4,9 +4,34 @@ class Config:
     FLASK_APP = os.getenv('FLASK_APP')
     SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS')
+    SECRET_KEY = os.environ.get('SECRET_KEY') # SECRET_KEY foi gerado utilizando https://randomkeygen.com/
+    MAIL_SERVER = os.environ.get('MAIL_SERVER')
+    MAIL_PORT = int(os.environ.get('MAIL_PORT', '587'))
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true')
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') 
+    #or \ 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+
+class TestingConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') 
+    #or \c'sqlite://'
+
+class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') 
+    #or \'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+
 
 config = {
-    'default': Config
+'development': DevelopmentConfig,
+'testing': TestingConfig,
+'production': ProductionConfig,
+'default': DevelopmentConfig
 }
 
 
@@ -24,27 +49,3 @@ config = {
 # SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 #tem que comentar tudo
-
-
-
-
-# class DevelopmentConfig(Config):
-#     DEBUG = True
-#     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-#     'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
-
-# class TestingConfig(Config):
-#     TESTING = True
-#     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
-#     'sqlite://'
-
-# class ProductionConfig(Config):
-#     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-#     'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-
-# config = {
-# 'development': DevelopmentConfig,
-# 'testing': TestingConfig,
-# 'production': ProductionConfig,
-# 'default': DevelopmentConfig
-# }
