@@ -11,9 +11,9 @@ def create_app(config_name):
 
     db.init_app(app)    
     from app.auth import auth as auth_bp
-    #from app.main import main as main_bp
+    from app.main import main as main_bp
 
-    #app.register_blueprint(main_bp)
-    app.register_blueprint(auth_bp, prefix ='/auth') 
+    app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp) #, url_prefix ='/auth') 
 
     return app

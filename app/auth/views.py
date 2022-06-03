@@ -10,3 +10,6 @@ def login():
 def registro():
     return render_template("register.html")
 
+@auth.route("/logout", methods=['GET','POST'])
+def logout():
+    return render_template("login.html")
