@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, flash, redirect, url_for, mak
 
 @auth.route("/login", methods=['GET','POST'])
 def login():
+    
     return render_template("login.html")
 
 @auth.route('/registro')
@@ -12,4 +13,5 @@ def registro():
 
 @auth.route("/logout", methods=['GET','POST'])
 def logout():
+    
     return render_template("login.html")
