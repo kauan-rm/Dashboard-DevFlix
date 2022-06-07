@@ -1,3 +1,7 @@
+<<<<<<< HEAD
 vars.ps1
 config.py
+=======
+venv
+>>>>>>> ef5977fd72b4ef037ea4f442aee4e5c3f2211276
 __pycache__

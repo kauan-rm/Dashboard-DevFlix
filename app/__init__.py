@@ -27,4 +27,8 @@ def create_app(config_name): # Método cria app
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp) #, url_prefix ='/auth') 
     # Termino import/registro Blueprint
+<<<<<<< HEAD
     return app
+=======
+    return app
+>>>>>>> ef5977fd72b4ef037ea4f442aee4e5c3f2211276

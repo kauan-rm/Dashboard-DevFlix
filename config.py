@@ -35,4 +35,11 @@ config = {  # Variavel de instancia de ambientes
 'testing': TestingConfig,
 'production': ProductionConfig,
 'default': DevelopmentConfig
+<<<<<<< HEAD
 }
+=======
+}
+
+
+
+>>>>>>> ef5977fd72b4ef037ea4f442aee4e5c3f2211276
