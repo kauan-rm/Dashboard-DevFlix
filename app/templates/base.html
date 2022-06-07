@@ -13,6 +13,7 @@
     </head>
     <body class="sb-nav-fixed" style="background-color: #e1e3db;">
         {% include 'navbar.html' %}
+
         <div style="background-color: #e1e3db;" id="layoutSidenav">
             {% include 'lateral_bar.html' %}
             <div  id="layoutSidenav_content">
@@ -21,7 +22,8 @@
                         {% block content %}{% endblock %}
                     </div>
                 </main>
-              <!--  <footer  class="py-4 bg-light mt-auto" >
+                
+                <!--  <footer  class="py-4 bg-light mt-auto" >
                     <div class="container-fluid px-4" >
                         <div class="d-flex align-items-center justify-content-between small" style="background-color: #e1e3db;">
                         </div>
