@@ -1,6 +1,6 @@
 from app.main import main
-from flask import Flask, render_template, request, flash, redirect, url_for, make_response
+from flask import render_template
 
-@main.route("/", methods=['GET','POST'])
+@main.route("/")
 def index():
     return render_template("base.html")

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+<div class="content">
+  <div class="justfy-content-center">
+    <h1>Dear {{ user.name }},Bem vindo à DevFLIX!</h1><br>
+    <p>Para confirmar a sua conta, por favor clique no link abaixo:</p><br>
+    <a href="{{ url_for('auth.confirm', token=token, _external=True) }}">Confirmar conta!</a><br><br>
+    <h4>Atenciosamente,</h4><br>
+    <p>Time DevFLIX.</p>
+  </div>
+</div>
