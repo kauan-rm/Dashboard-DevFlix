@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\55419\Documents\Python\DevFlix\Dashboard-DevFlix\venv"
+VIRTUAL_ENV="C:\Users\Kauan\Documents\DevStar\Back-End\Dashboard-DevFlix\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

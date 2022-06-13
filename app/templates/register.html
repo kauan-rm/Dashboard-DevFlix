@@ -6,45 +6,45 @@
         <div class="card shadow-lg border-0 rounded-lg mt-5" style="background-image: linear-gradient(to bottom right, #2f2e30, #2f2e30);">
             <div class="card-header"><h3 class="text-center font-weight-light my-4" style="color: white;">Criar Conta</h3></div>
             <div class="card-body">
-                <form >
+                <form method="post" >
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-floating mb-3 mb-md-0">
-                                <input class="form-control" id="inputFirstName" type="text" placeholder="Digite o seu primeiro nome" />
+                                <input required class="form-control" id="inputFirstName" name="nome" type="text" placeholder="Digite o seu primeiro nome" />
                                 <label for="inputFirstName">Nome</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input class="form-control" id="inputLastName" type="text" placeholder="digite sou ultimo nome" />
+                                <input class="form-control" id="inputLastName" name="sobrenome" type="text" placeholder="digite sou ultimo nome" />
                                 <label for="inputLastName">Sobrenome</label>
                             </div>
                         </div>
                     </div>
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="CPF" type="text" placeholder="digite seu CPF" />
+                        <input required class="form-control" id="CPF" name="cpf" type="text" placeholder="digite seu CPF" />
                         <label for="inputLastName">CPF</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
+                        <input required class="form-control" id="inputEmail" name="email" type="email" placeholder="name@example.com"  />
                         <label for="inputEmail">E-mail</label>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-floating mb-3 mb-md-0">
-                                <input class="form-control" id="inputPassword" type="password" placeholder="Crie uma senha" />
+                                <input required class="form-control" id="inputPassword" name="senha" type="password" placeholder="Crie uma senha" />
                                 <label for="inputPassword">Senha</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3 mb-md-0">
-                                <input class="form-control" id="inputPasswordConfirm" type="password" placeholder="Confirme sua senha" />
+                                <input required class="form-control" id="inputPasswordConfirm" name="conf_senha" type="password" placeholder="Confirme sua senha" />
                                 <label for="inputPasswordConfirm">Confirmar senha</label>
                             </div>
                         </div>
                     </div>
                     <div class="mt-4 mb-0">
-                        <div class="d-grid"><a class="btn btn-outline-success btn-block" href="{{ url_for('main.index') }}">Criar conta</a></div>
+                        <div class="d-grid"><button type="submit" class="btn btn-outline-success btn-block" href="{{ url_for('main.index') }}">Criar conta</a></div>
                     </div>
                 </form>
             </div>

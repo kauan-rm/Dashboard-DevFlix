@@ -8,3 +8,4 @@ $env:MAIL_USE_TLS=1
 $env:MAIL_USE_SSL=0
 $env:MAIL_USERNAME="devflix@hotmail.com"
 $env:MAIL_PASSWORD="Trembala"
+$env:FLASK_DEBUG=1
