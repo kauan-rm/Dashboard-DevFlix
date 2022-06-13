@@ -6,7 +6,7 @@
             <div class="card shadow-lg border-0 rounded-lg mt-5" style="background-image: linear-gradient(to bottom right, #2f2e30, #2f2e30);">
                 <div class="card-header"><h3 class="text-center font-weight-light my-4" style="color: white;">Login</h3></div>
                 <div class="card-body">
-                    <form  method="POST">
+                    <form  method="POST" action="{{ url_for('auth.do_login') }}">
                         <div class="form-floating mb-3">
                             <input required class="form-control" id="inputEmail" name="email" type="email" placeholder="name@example.com" required/>
                             <label for="inputEmail" >E-mail</label>
