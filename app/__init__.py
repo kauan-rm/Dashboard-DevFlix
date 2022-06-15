@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()  # Instanciando o Banco de Dados do sqlAlchemy
 login_manager = LoginManager()
 login_manager.session_protection = "strong" #nível de encriptação
-login_manager.login_view = 'auth.login' #
+login_manager.login_view = 'auth.login' 
 
 def create_app(config_name): # Método cria app
     app = Flask(__name__)

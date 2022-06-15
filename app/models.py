@@ -10,12 +10,24 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def load_user(user_id):
     return User.query.get(int(user_id))  #carregamento do usuário
 
+<<<<<<< HEAD
 class Permission: # Classe de permissões
     USAR = 1
     CRIAR = 2
     DESABILITAR = 4
     ADMIN = 8  
    
+=======
+def insert_users(request):
+    user = User()
+    user.nome = request['nome']
+    user.cpf = request['cpf']
+    user.email = request['email']
+    user.senha = request['senha']
+    db.session.add(user)
+    db.session.commit()
+
+>>>>>>> acde7fbf2ac9b85c78da11398623fd14dacc1299
 class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
     __tablename__="users" # Cria nome da tabela users
    
@@ -24,7 +36,7 @@ class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
     nome = db.Column(db.String(64), nullable=False)
     cpf = db.Column(db.String(11), unique=True, nullable=False)
     email = db.Column(db.String(64),unique=True, nullable=False)
-    senha_hash = db.Column(db.String(128), nullable=False)
+    senha_hash = db.Column(db.String(256), nullable=False)
     criado_em = db.Column(db.DateTime,nullable=False)
     # modificado_em = db.column(db.DateTime, nullable=False)
     ativo = db.Column(db.Boolean, default = True)
@@ -47,6 +59,8 @@ class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
 
     def verify_password(self, senha):
         return check_password_hash(self.senha_hash, senha)
+
+ 
 
 class Role(db.Model): # Classe cria tabela de papeis
     __tablename__= "roles" # Cria nome da tabela roles
