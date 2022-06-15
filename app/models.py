@@ -10,7 +10,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def load_user(user_id):
     return User.query.get(int(user_id))  #carregamento do usuário
 
-
+class Permission: # Classe de permissões
+    USAR = 1
+    CRIAR = 2
+    DESABILITAR = 4
+    ADMIN = 8  
+   
 class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
     __tablename__="users" # Cria nome da tabela users
    
@@ -30,7 +35,7 @@ class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
         self.criado_em = datetime.now() 
         self.modificado_em = datetime.now()
         if not self.role:
-            self.role = Role.query.filter_by(padrao=True).first()
+            self.role = Role.query.filter_by(padrao=True).first() # Filtra os papéis para não serem repetidos
 
     @property
     def senha(self):
@@ -49,6 +54,47 @@ class Role(db.Model): # Classe cria tabela de papeis
     # Inicio colunas
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(16), nullable= False)
+    permissao = db.column(db.Interger, nullable=False, defalt=0)
     users = db.relationship("User", backref="role") # Cria relacionamento com User()
-    padrao = db.Column(db.Boolean, default=False, index=True)
+    padrao = db.Column(db.Boolean, default=False, index=True) # Define usuario como padrão
     # Término colunas 
+
+    @staticmethod # Método statico
+    def insert_roles(): # Método de papéis
+        roles ={
+            'desabilitado' :[],
+            'usuario comum':[Permission.USAR],
+            'financeiro':[Permission.CRIAR, Permission.DESABILITAR],
+            'moderador':[ Permission.CRIAR],
+            'administrador':[Permission.USAR, Permission.CRIAR, Permission.DESABILITAR, Permission.ADMIN]
+        }
+        padrao = 'usuario comum'
+        for r in roles:
+            role = Role.query.filter_by(name=r).first()
+            if not role:
+                role = Role()
+                role.nome = r
+
+            role.reset_permission()
+            for permissao in role[r]:
+                role.add_permission(permissao)
+            role.padrao =(role.nome == padrao)
+            db.session.add(role)
+        db.session.commit()
+
+
+        
+
+
+    def add_permission(self,permissao):
+        if not self.has_permission(permissao):
+         self.permissao += permissao
+
+    def remove_permission(self, permissao):
+        self.permissao -= permissao
+
+    def reset_permission(self):
+        self.permissao = 0 
+
+    def has_permission(self, permissao):
+        return self.permissao & permissao == permissao
