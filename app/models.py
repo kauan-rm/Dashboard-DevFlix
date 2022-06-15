@@ -10,14 +10,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def load_user(user_id):
     return User.query.get(int(user_id))  #carregamento do usuário
 
-<<<<<<< HEAD
 class Permission: # Classe de permissões
     USAR = 1
     CRIAR = 2
     DESABILITAR = 4
     ADMIN = 8  
    
-=======
+
 def insert_users(request):
     user = User()
     user.nome = request['nome']
@@ -27,7 +26,6 @@ def insert_users(request):
     db.session.add(user)
     db.session.commit()
 
->>>>>>> acde7fbf2ac9b85c78da11398623fd14dacc1299
 class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
     __tablename__="users" # Cria nome da tabela users
    
@@ -47,7 +45,7 @@ class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
         self.criado_em = datetime.now() 
         self.modificado_em = datetime.now()
         if not self.role:
-            self.role = Role.query.filter_by(padrao=True).first() # Filtra os papéis para não serem repetidos
+            self.role = Role.query.filter_by(padrao=True).first() # Filtra os papéis para não serem duplicados
 
     @property
     def senha(self):
@@ -75,20 +73,23 @@ class Role(db.Model): # Classe cria tabela de papeis
 
     @staticmethod # Método statico
     def insert_roles(): # Método de papéis
-        roles ={
+        roles ={  # Inicio das definições de permissões dos papéis
             'desabilitado' :[],
             'usuario comum':[Permission.USAR],
             'financeiro':[Permission.CRIAR, Permission.DESABILITAR],
             'moderador':[ Permission.CRIAR],
             'administrador':[Permission.USAR, Permission.CRIAR, Permission.DESABILITAR, Permission.ADMIN]
-        }
-        padrao = 'usuario comum'
+        } # Término das definições de permissões dos papéis
+        padrao = 'usuario comum' # Define usuário comum como padrão
+
+        # Verificando se os papéis existem para criar um novo papel sem duplicar um já existente
         for r in roles:
             role = Role.query.filter_by(name=r).first()
             if not role:
                 role = Role()
                 role.nome = r
 
+            # Reseta as pemissões para criar uma nova e adiciona os papéis banco de dados
             role.reset_permission()
             for permissao in role[r]:
                 role.add_permission(permissao)
@@ -99,16 +100,18 @@ class Role(db.Model): # Classe cria tabela de papeis
 
         
 
-
-    def add_permission(self,permissao):
+    # Inicio dos métodos de permissões
+    def add_permission(self,permissao):  # Adiciona permissão
         if not self.has_permission(permissao):
          self.permissao += permissao
 
-    def remove_permission(self, permissao):
+    def remove_permission(self, permissao): # Remove permissão
         self.permissao -= permissao
 
-    def reset_permission(self):
+    def reset_permission(self): # Reseta permissão
         self.permissao = 0 
 
-    def has_permission(self, permissao):
+    def has_permission(self, permissao): # Tem permissão
         return self.permissao & permissao == permissao
+
+    # Témino dos métodos de permissões
