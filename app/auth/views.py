@@ -1,9 +1,13 @@
 from app.auth import auth
 from flask import render_template, request, redirect, url_for, flash
 from app import db
+from config import Config
 from app.models import User
 from ..email import send_email 
 from flask_login import login_required, current_user, login_user, logout_user
+from app.serializer import Serializer
+secret_key = Config.SECRET_KEY
+
 
 @auth.route("/login") # Rota de login
 def login():
@@ -37,30 +41,33 @@ def do_register():
             if(user.email):
                 db.session.add(user)
                 db.session.commit()
-                token = user.generate_confirmation_token()
-                send_email(user.email, 'Confirmação de Conta',
+                token = Serializer.generate_confirmation_token(secret_key, user.id)
+                send_email(user.email, 'Confirmação de E-mail',
                 'confirm', user=user, token=token)
                 flash('Um e-mail de confirmação foi enviado ao seu email!')
                 return redirect(url_for('main.index'))
     return render_template('register.html')
 
 
-@auth.route('/confirm/<token>')#test confirm email
-#@login_required
+@auth.route('/confirm/<token>')#confirma email
+@login_required
 def confirm(token):
+
     if current_user.confirmed:
         return redirect(url_for('main.index'))
-    if current_user.confirm(token):
+    if Serializer.confirm(secret_key, current_user, token):
+        current_user.confirmed = True
+        db.session.add(current_user) 
         db.session.commit()
         flash('Conta confirmada. Obrigado!')
     else:
         flash('O link de confirmação está inválido ou expirou!')
     return redirect(url_for('main.index'))
 
-@auth.route('/confirm')#teste confrm email
+@auth.route('/confirm')#confirma email
 @login_required
 def resend_confirmation():
-    token = current_user.generate_confirmation_token()
+    token = Serializer.generate_confirmation_token(secret_key,current_user)
     send_email(current_user.email, 'Confirme Sua Conta',
     'confirm', user=current_user, token=token)
     flash('Um novo e-mail de confirmação foi enviado para seu e-mail!')
@@ -69,5 +76,5 @@ def resend_confirmation():
 @auth.route("/logout", methods=['GET','POST'])
 def logout():
     logout_user(current_user)
-    return render_template("login.html")
+    return redirect(url_for('auth.login'))
 

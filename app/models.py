@@ -1,16 +1,13 @@
 from app import db, login_manager
-from flask import current_app
-from flask_login import UserMixin, AnonymousUserMixin
+from flask_login import UserMixin
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired
-
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))  #carregamento do usuário
 
-class User(UserMixin, db.Model, AnonymousUserMixin):
+class User(UserMixin, db.Model):
     __tablename__="users"
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(64), nullable=False)
@@ -36,25 +33,6 @@ class User(UserMixin, db.Model, AnonymousUserMixin):
     def verify_password(self, senha):
         return check_password_hash(self.senha_hash, senha)
 
-    #confirmação de email
-
-    def generate_confirmation_token(self, expiration=3600):
-        s = Serializer(current_app.config['SECRET_KEY'], expiration)
-        return s.dumps({'confirm': self.id})#.decode('utf-8')  
-
-    def confirm(self, token):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token)#.encode('utf-8')
-        except SignatureExpired:
-            return 'Houve um erro com o token!'
-        if data.get('confirm') != self.id:
-            return False      
-        self.confirmed = True
-        db.session.add(self)
-        return True
-
-   #confirmação de email
 
     def __init__(self) -> None:
         self.criado_em = datetime.now()

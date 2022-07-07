@@ -8,11 +8,11 @@
                 <div class="card-body">
                     <form  method="POST" action="{{ url_for('auth.do_login') }}">
                         <div class="form-floating mb-3">
-                            <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" required/>
+                            <input class="form-control" name="email" id="inputEmail" type="email" placeholder="name@example.com" required/>
                             <label for="inputEmail" >E-mail</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input class="form-control" id="inputPassword" type="password" placeholder="Senha" />
+                            <input class="form-control" name="senha" id="inputPassword" type="password" placeholder="Senha" />
                             <label for="inputPassword">Senha</label>
                         </div>
                         <div class="form-check mb-3">
