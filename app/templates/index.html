@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row col-12">
+    {% for i in range(10): %}
+
+      <div class=" cards m-2 col-3">
+        <div class="card-img-wrapper">
+          <img src="{{ url_for('static', filename='assets/img/constantine.png')}}" alt="Card image cap">
+        </div>
+        <div class="card-info text-white">
+          <h2>Constantine</h2>
+          <p>Ação e Terror</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

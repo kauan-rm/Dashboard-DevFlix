@@ -7,4 +7,4 @@ from flask import render_template
 @main.route("/") # Rota index em desenvolvimento
 @login_required
 def index():
-    return render_template("base.html")  # Renderiza arquivo html pasta templates
+    return render_template('index.html')  # Renderiza arquivo html pasta templates

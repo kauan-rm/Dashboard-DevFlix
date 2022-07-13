@@ -65,8 +65,7 @@ class Role(db.Model): # Classe cria tabela de papeis
 
     # Inicio colunas
     id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(16), nullable= False)
-    permissao = db.column(db.Interger, nullable=False, defalt=0)
+    nome = db.Column(db.String(16),  default=0)
     users = db.relationship("User", backref="role") # Cria relacionamento com User()
     padrao = db.Column(db.Boolean, default=False, index=True) # Define usuario como padrão
     # Término colunas 
