@@ -114,3 +114,9 @@ class Role(db.Model): # Classe cria tabela de papeis
         return self.permissao & permissao == permissao
 
     # Témino dos métodos de permissões
+
+class Imagem(db.Model): # Classe com ORM - criar tabela usuário
+    __tablename__="tabela_imagens" # Cria nome da tabela users
+
+    id = db.Column(db.Integer, primary_key=True)
+    endereco = db.Column(db.String(256), nullable=False)
