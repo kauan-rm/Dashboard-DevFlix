@@ -3,7 +3,6 @@ from app import db, login_manager
 from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.serializer import Serializer
 # Termino import biblioteca
 
 
@@ -19,7 +18,7 @@ class Permission: # Classe de permissões
    
 
 
-class User(db.Model,UserMixin, Serializer): # Classe com ORM - criar tabela usuário
+class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
     __tablename__="users" # Cria nome da tabela users
    
     # Inicio colunas  
@@ -32,10 +31,12 @@ class User(db.Model,UserMixin, Serializer): # Classe com ORM - criar tabela usu�
     # modificado_em = db.column(db.DateTime, nullable=False)
     ativo = db.Column(db.Boolean, default = True)
     confirmed = db.Column(db.Boolean, default=False) #teste email
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False) # Coluna de papeis - chave estrangeira de Role()
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), default=2) # Coluna de papeis - chave estrangeira de Role()
     # Término colunas tabela
-
-    def __init__(self) -> None: # Método cria data/hora automático
+    
+    
+    # Método cria data/hora automático
+    def __init__(self):# -> None# Método cria data/hora automático  
         self.criado_em = datetime.now() 
         self.modificado_em = datetime.now()
         if not self.role:
@@ -62,7 +63,7 @@ class Role(db.Model): # Classe cria tabela de papeis
     users = db.relationship('User', backref='role') # Cria relacionamento com User()
     nome = db.Column(db.String(16),  default=0)
     padrao = db.Column(db.Boolean, default=False, index=True) # Define usuario como padrão
-    perm = db.Column(db.Integer, nullable=False, default=0)
+    permissao = db.Column(db.Integer, nullable=False, default=0)
     # Término colunas 
 
     @staticmethod # Método statico

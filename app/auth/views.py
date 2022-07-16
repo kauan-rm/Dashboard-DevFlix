@@ -45,17 +45,18 @@ def do_register():
                 token = Serializer.generate_token(secret_key, user.id)
                 send_email(user.email, 'Confirmação de E-mail',
                 'confirm', user=user, token=token)
-                flash('Um e-mail de confirmação foi enviado ao seu email!')
-                return redirect(url_for('main.home'))
+                flash('Um link de confirmação de conta, foi enviado ao seu e-mail!')
+            return redirect(url_for('main.index'))
     return render_template('register.html')
 
+    
 @auth.route('/confirm/<token>')#confirma email só funciona se o usuario já estiver logado e clicar no link de confirmação
 @login_required
 def confirm(token):
-    # login_user(current_user)
+    s = Serializer()
     if current_user.confirmed:
-        return redirect(url_for('main.home'))
-    if current_user.confirm(secret_key, current_user.id, token):
+        return redirect(url_for('main.home'))    
+    if s.verify_auth_token(secret_key, token):
         current_user.confirmed = True
         db.session.add(current_user)
         db.session.commit()

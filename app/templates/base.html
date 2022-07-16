@@ -20,7 +20,11 @@
             <div  id="layoutSidenav_content">
                 <main>
                     <div style="background-color: #e1e3db;" class="container-fluid px-4">
-                        {% block page %}{% endblock %}
+                        {% if get_flashed_messages(): %}
+                            <div class=" mt-5">   
+                                {% include 'response_flash.html' %}
+                            </div>
+                        {% endif %}
                         {% block content %}{% endblock %}
                     </div>
                 </main>

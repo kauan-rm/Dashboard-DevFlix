@@ -1,19 +1,19 @@
 import jwt
 import datetime
 import time
-from flask import abort
-# from app.models import User
+# from flask import abort
 
-def requisitos(campos, chaves):
-    falta = []
+from app.models import User
 
-    for campo in campos:
-        if campo not in chaves:
-            falta.append(campo)        
+# def requisitos(campos, chaves):
+#     falta = []
+
+#     for campo in campos:
+#         if campo not in chaves:
+#             falta.append(campo)        
     
-    if falta:
-        abort(422, f"O(s) campo(s) {falta} é(são) obrigatório(s)")
-
+#     if falta:
+#         abort(422, f"O(s) campo(s) {falta} é(são) obrigatório(s)")
 class Serializer:  
 
     @staticmethod
@@ -38,7 +38,7 @@ class Serializer:
         return token
 
     @staticmethod
-    def confirm(secret_key:str, user_id:int, token:str, treshold=10):
+    def confirm(secret_key:str, user_id:int, token:str, treshold=3600):
         '''
         Confirma o token gerado pelo método generate_token,
         considerando treshold segundos de tolerância.
@@ -62,15 +62,15 @@ class Serializer:
             return False
         return True
 
-    # @staticmethod
-    # def verify_auth_token(secret_key, token, treshold=10):
-    #     data = jwt.decode(
-    #             token,
-    #             secret_key,
-    #             leeway=datetime.timedelta(seconds=treshold),
-    #             algorithms=["HS256"]
-    #         )
-    #     return User.query.get(data['confirm'])        
+    @staticmethod
+    def verify_auth_token(secret_key:str, token:str, treshold=3600):
+        data = jwt.decode(
+                token,
+                secret_key,
+                leeway=datetime.timedelta(seconds=treshold),
+                algorithms=["HS256"]
+            )
+        return User.query.get(data['confirm'])        
 
     @classmethod
     def test(cls, sleep=1, treshold=10, expiration=10):
@@ -86,26 +86,4 @@ class Serializer:
         while t <= expiration + treshold + 1:
             print(f"t = {t} s: {cls.confirm('kkk', 1, token)}")
             time.sleep(sleep)
-            t += sleep
-
-
-
-  #   #confirmação de email
-
-  #   def generate_confirmation_token(self, expiration=3600):
-  #       s = Serializer(current_app.config['SECRET_KEY'], expiration)
-  #       return s.dumps({'confirm': self.id})#.decode('utf-8')  
-
-  #   def confirm(self, token):
-  #       s = Serializer(current_app.config['SECRET_KEY'])
-  #       try:
-  #           data = s.loads(token)#.encode('utf-8')
-  #       except SignatureExpired:
-  #           return 'Houve um erro com o token!'
-  #       if data.get('confirm') != self.id:
-  #           return False      
-  #       self.confirmed = True
-  #       db.session.add(self)
-  #       return True
-
-  #  #confirmação de email            
+            t += sleep    

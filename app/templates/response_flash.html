@@ -1,13 +1,13 @@
-{% extends 'base.html' %}
-{% block page %}
+   <div id="flash" class="container">
+      <div  class="alert alert-warning">
+         <button onclick="removeFlash()" type="button" class="close" data-dismiss="alert">&times;</button>
+         <p>{{ get_flashed_messages() }}</p>
+      </div>
 
-<div class="container">
- {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
- {{ message }}
-    </div>
- {% endfor %}
-</div>
+   </div>
 
-{% endblock %}
+   <script>
+      function removeFlash(){
+         document.getElementById('flash').innerHTML = "";
+      }
+  </script>

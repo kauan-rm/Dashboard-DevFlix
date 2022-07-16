@@ -1,9 +1,8 @@
 # Inicio import
 from app.main import main
 from flask_login import login_required
-from flask import render_template, request
+from flask import render_template, request,g
 from ..models import Imagem, Permission
-from .authentication import auth
 from app.main.decorators import permission_required
 # Termino import
 
@@ -12,9 +11,9 @@ def index():
     return render_template('base.html')  # Renderiza arquivo html pasta templates
 
 @main.route("/home")
-@auth.login_required
+@login_required
 @permission_required(Permission.USAR)
-@permission_required(Permission.ADMIN)
+
 def home(): 
     ROWS_PER_PAGE = 6
 
