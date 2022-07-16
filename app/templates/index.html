@@ -18,7 +18,7 @@
   
   <!-- Pagination Links-->
   <div class="text-right">
-    <a href="{{ url_for('main.index', page=pages.prev_num) }}" class="btn btn-outline-dark 
+    <a href="{{ url_for('main.home', page=pages.prev_num) }}" class="btn btn-outline-dark 
      {% if pages.page == 1 %}disabled{% endif %}">
       &laquo;
     </a>
@@ -27,11 +27,11 @@
     {% if page_num %}
     <!-- Check for the active page and set the link to "Active"-->
     {% if pages.page == page_num %}
-    <a href="{{ url_for('main.index', page=page_num) }}" class="btn btn-dark">
+    <a href="{{ url_for('main.home', page=page_num) }}" class="btn btn-dark">
       {{ page_num }}
     </a>
     {% else %}
-    <a href="{{ url_for('main.index', page=page_num) }}" class="btn btn-outline-dark">
+    <a href="{{ url_for('main.home', page=page_num) }}" class="btn btn-outline-dark">
       {{ page_num }}
     </a>
     {% endif %}
@@ -39,7 +39,7 @@
     ...
     {% endif %}
     {% endfor %}
-    <a href="{{ url_for('main.index', page=pages.next_num) }}" class="btn btn-outline-dark 
+    <a href="{{ url_for('main.home', page=pages.next_num) }}" class="btn btn-outline-dark 
      {% if pages.page == pages.pages %}disabled{% endif %}">
       &raquo;
     </a>
