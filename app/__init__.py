@@ -4,6 +4,7 @@ from flask import Flask
 from config import config
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail
 # Termino import bibliotecas do flask
 
 db = SQLAlchemy()  # Instanciando o Banco de Dados do sqlAlchemy
@@ -11,12 +12,14 @@ login_manager = LoginManager()
 login_manager.session_protection = "strong" #nível de encriptação
 login_manager.login_view = 'auth.login' 
 
+mail = Mail()
 def create_app(config_name): # Método cria app
     app = Flask(__name__)
     app.config.from_object(config[config_name])  # Seleciona o ambiente de desenvolvimento
 
     db.init_app(app) # Iniciando o Banco de Dados
     login_manager.init_app(app)   
+    mail.init_app(app)
 
     # Inicio import/registro Blueprint
     from app.auth import auth as auth_bp

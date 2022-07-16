@@ -3,6 +3,7 @@ from app import db, login_manager
 from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from app.serializer import Serializer
 # Termino import biblioteca
 
 
@@ -17,16 +18,8 @@ class Permission: # Classe de permissões
     ADMIN = 8  
    
 
-def insert_users(request):
-    user = User()
-    user.nome = request['nome']
-    user.cpf = request['cpf']
-    user.email = request['email']
-    user.senha = request['senha']
-    db.session.add(user)
-    db.session.commit()
 
-class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
+class User(db.Model,UserMixin, Serializer): # Classe com ORM - criar tabela usuário
     __tablename__="users" # Cria nome da tabela users
    
     # Inicio colunas  
@@ -38,7 +31,8 @@ class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
     criado_em = db.Column(db.DateTime,nullable=False)
     # modificado_em = db.column(db.DateTime, nullable=False)
     ativo = db.Column(db.Boolean, default = True)
-    role_id = db.Column(db.Integer, db.ForeignKey("roles.id")) # Coluna de papeis - chave estrangeira de Role()
+    confirmed = db.Column(db.Boolean, default=False) #teste email
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False) # Coluna de papeis - chave estrangeira de Role()
     # Término colunas tabela
 
     def __init__(self) -> None: # Método cria data/hora automático
@@ -65,9 +59,10 @@ class Role(db.Model): # Classe cria tabela de papeis
 
     # Inicio colunas
     id = db.Column(db.Integer, primary_key=True)
+    users = db.relationship('User', backref='role') # Cria relacionamento com User()
     nome = db.Column(db.String(16),  default=0)
-    users = db.relationship("User", backref="role") # Cria relacionamento com User()
     padrao = db.Column(db.Boolean, default=False, index=True) # Define usuario como padrão
+    perm = db.Column(db.Integer, nullable=False, default=0)
     # Término colunas 
 
     @staticmethod # Método statico
@@ -92,7 +87,7 @@ class Role(db.Model): # Classe cria tabela de papeis
             role.reset_permission()
             for permissao in role[r]:
                 role.add_permission(permissao)
-            role.padrao =(role.nome == padrao)
+            role.padrao = (role.nome == padrao)
             db.session.add(role)
         db.session.commit()
 

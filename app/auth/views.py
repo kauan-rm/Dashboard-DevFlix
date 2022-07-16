@@ -1,8 +1,13 @@
 # Inicio import
-from app.auth import auth 
-from flask import render_template, request, flash, redirect, url_for
-from flask_login import login_user, logout_user
-from ..models import User,insert_users
+from app.auth import auth
+from flask import render_template, request, redirect, url_for, flash
+from app import db
+from config import Config
+from app.models import User
+from ..email import send_email 
+from flask_login import login_required, current_user, login_user, logout_user
+from app.serializer import Serializer
+secret_key = Config.SECRET_KEY
 # Termino Import
 
 @auth.route("/login") # Rota de login
@@ -15,7 +20,7 @@ def do_login():
         user = User.query.filter_by(email=request.form['email']).first()
         if user and user.verify_password(request.form['senha']): 
             login_user(user)
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.home'))
         return redirect(url_for('auth.login'))
     return render_template("login.html") # Renderiza arquivo html pasta templates
 
@@ -26,13 +31,50 @@ def registro():
 
 @auth.route('/do_register', methods=['POST']) # Rota de registro por post
 def do_register():
-    if request.form and request.form['senha']==request.form['conf_senha']:    
-        insert_users(request.form)
-        return "dados inseridos no banco de dados" # Alan aqui sua parte
-    return render_template("register.html")  # Renderiza arquivo html pasta templates
-    
+    if request.form:
+        if request.form['senha'] == request.form['conf_senha']:
+            user = User()
+            user.nome = request.form['nome']
+            user.sobrenome = request.form['sobrenome']
+            user.email = request.form['email']
+            user.cpf = request.form['cpf']
+            user.senha = request.form['senha']
+            if(user.email):
+                db.session.add(user)
+                db.session.commit()
+                token = Serializer.generate_token(secret_key, user.id)
+                send_email(user.email, 'Confirmação de E-mail',
+                'confirm', user=user, token=token)
+                flash('Um e-mail de confirmação foi enviado ao seu email!')
+                return redirect(url_for('main.home'))
+    return render_template('register.html')
 
-@auth.route("/logout", methods=['GET','POST']) # Rota de logout
+@auth.route('/confirm/<token>')#confirma email só funciona se o usuario já estiver logado e clicar no link de confirmação
+@login_required
+def confirm(token):
+    # login_user(current_user)
+    if current_user.confirmed:
+        return redirect(url_for('main.home'))
+    if current_user.confirm(secret_key, current_user.id, token):
+        current_user.confirmed = True
+        db.session.add(current_user)
+        db.session.commit()
+        flash('Obrigado por confirmar seu email!')
+        return redirect(url_for('main.home'))
+    else:
+        flash('O link de confirmação está inválido ou expirou!')
+    return redirect(url_for('auth.registro'))
+
+@auth.route('/confirm')#confirma email
+@login_required
+def resend_confirmation():
+    token = Serializer.generate_confirmation_token(secret_key,current_user)
+    send_email(current_user.email, 'Confirme Sua Conta',
+    'confirm', user=current_user, token=token)
+    flash('Um novo e-mail de confirmação foi enviado para seu e-mail!')
+    return redirect(url_for('auth.register'))
+
+@auth.route("/logout") # Rota de logout
 def logout():
     logout_user() #funcao logout do flask
     return redirect(url_for('auth.login'))    
