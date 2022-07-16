@@ -22,7 +22,7 @@ def do_login():
             login_user(user)
             return redirect(url_for('main.home'))
         return redirect(url_for('auth.login'))
-    return render_template("login.html") # Renderiza arquivo html pasta templates
+    return redirect(url_for('auth.login')) # Renderiza arquivo html pasta templates
 
 
 @auth.route('/registro') # Rota de registro 
@@ -45,28 +45,28 @@ def do_register():
                 token = Serializer.generate_token(secret_key, user.id)
                 send_email(user.email, 'Confirmação de E-mail',
                 'confirm', user=user, token=token)
-                flash('Um link de confirmação de conta, foi enviado ao seu e-mail!')
-            return redirect(url_for('main.index'))
-    return render_template('register.html')
+                flash('Um e-mail de confirmação foi enviado ao seu email!')
+                return redirect(url_for('main.index'))
+    return redirect(url_for('auth.registro'))
 
-    
-@auth.route('/confirm/<token>')#confirma email só funciona se o usuario já estiver logado e clicar no link de confirmação
-@login_required
+@auth.route('/confirm/<token>')
 def confirm(token):
-    s = Serializer()
-    if current_user.confirmed:
-        return redirect(url_for('main.home'))    
-    if s.verify_auth_token(secret_key, token):
-        current_user.confirmed = True
-        db.session.add(current_user)
+    if current_user.is_authenticated:
+        return redirect(url_for('main.home'))
+    
+    if Serializer.verify_auth_token(secret_key,token):
+        u = Serializer.verify_auth_token(secret_key,token)
+        u.confirmed = True 
+        db.session.add(u)
         db.session.commit()
+        login_user(u)
         flash('Obrigado por confirmar seu email!')
         return redirect(url_for('main.home'))
     else:
         flash('O link de confirmação está inválido ou expirou!')
     return redirect(url_for('auth.registro'))
 
-@auth.route('/confirm')#confirma email
+@auth.route('/resend_confirmation')#confirma email
 @login_required
 def resend_confirmation():
     token = Serializer.generate_confirmation_token(secret_key,current_user)

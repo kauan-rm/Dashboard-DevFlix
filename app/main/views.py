@@ -13,11 +13,12 @@ def index():
 @main.route("/home")
 @login_required
 @permission_required(Permission.USAR)
+@permission_required(Permission.ADMIN)
 
 def home(): 
-    ROWS_PER_PAGE = 6
+    ROWS_PER_PAGE = 10
 
-     # Set the pagination configuration
+     # Configuração de paginação
     page = request.args.get('page', 1, type=int)
     pages = Imagem.query.paginate(page=page, per_page=ROWS_PER_PAGE)
     return render_template('index.html', pages=pages)

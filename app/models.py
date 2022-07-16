@@ -1,7 +1,7 @@
 # Inicio import bibliotecas
 from app import db, login_manager
 from datetime import datetime
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 # Termino import biblioteca
 
@@ -9,14 +9,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))  #carregamento do usuário
-
-class Permission: # Classe de permissões
-    USAR = 1
-    CRIAR = 2
-    DESABILITAR = 4
-    ADMIN = 8  
-   
-
 
 class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
     __tablename__="users" # Cria nome da tabela users
@@ -53,7 +45,11 @@ class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
     def verify_password(self, senha):
         return check_password_hash(self.senha_hash, senha)
 
- 
+class Permission: # Classe de permissões
+    USAR = 1
+    CRIAR = 2
+    DESABILITAR = 4
+    ADMIN = 8  
 
 class Role(db.Model): # Classe cria tabela de papeis
     __tablename__= "roles" # Cria nome da tabela roles
