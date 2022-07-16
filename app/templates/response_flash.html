@@ -1,7 +1,7 @@
    <div id="flash" class="container">
       <div  class="alert alert-warning">
          <button onclick="removeFlash()" type="button" class="close" data-dismiss="alert">&times;</button>
-         <p>{{ get_flashed_messages() }}</p>
+         <span>{{ get_flashed_messages()[0] }}</span>
       </div>
 
    </div>

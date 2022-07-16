@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def load_user(user_id):
     return User.query.get(int(user_id))  #carregamento do usuário
 
+
 class Permission: # Classe de permissões
     USAR = 1
     CRIAR = 2
@@ -24,6 +25,7 @@ class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
     # Inicio colunas  
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(64), nullable=False)
+    sobrenome = db.Column(db.String(64), nullable=False)
     cpf = db.Column(db.String(11), unique=True, nullable=False)
     email = db.Column(db.String(64),unique=True, nullable=False)
     senha_hash = db.Column(db.String(256), nullable=False)
@@ -53,7 +55,12 @@ class User(db.Model,UserMixin): # Classe com ORM - criar tabela usuário
     def verify_password(self, senha):
         return check_password_hash(self.senha_hash, senha)
 
- 
+    def verify_cpf(cpf):
+        cpf_replace = cpf.replace('.', '')
+        cpf_replace = cpf_replace.replace('-', '')
+        if len(cpf_replace) != 11:
+            return False
+        return cpf_replace
 
 class Role(db.Model): # Classe cria tabela de papeis
     __tablename__= "roles" # Cria nome da tabela roles
