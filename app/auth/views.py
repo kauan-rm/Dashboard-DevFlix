@@ -7,6 +7,7 @@ from app.models import User
 from ..email import send_email 
 from flask_login import login_required, current_user, login_user, logout_user
 from app.serializer import Serializer
+import jwt
 secret_key = Config.SECRET_KEY
 # Termino Import
 
@@ -32,33 +33,33 @@ def registro():
 @auth.route('/do_register', methods=['POST']) # Rota de registro por post
 def do_register():
     if request.form:
-        if request.form['senha'] == request.form['conf_senha']:
+        if request.form['senha'] == request.form['conf_senha'] and request.form['email'] != '':
             user = User()
             user.nome = request.form['nome']
             user.sobrenome = request.form['sobrenome']
             user.email = request.form['email']
             user.cpf = request.form['cpf']
             user.senha = request.form['senha']
-            if(user.email):
-                db.session.add(user)
-                db.session.commit()
-                token = Serializer.generate_token(secret_key, user.id)
-                send_email(user.email, 'Confirmação de E-mail',
-                'confirm', user=user, token=token)
-                flash('Um link de confirmação de conta, foi enviado ao seu e-mail!')
+            db.session.add(user)
+            db.session.commit()
+            token = Serializer.generate_token(secret_key, user.id)
+
+            send_email(user.email, 'Confirmação de E-mail',
+            'confirm', user=user, token=token)
+
+            flash('Um link de confirmação de conta, foi enviado ao seu e-mail!')
             return redirect(url_for('main.index'))
     return render_template('register.html')
 
     
 @auth.route('/confirm/<token>')#confirma email só funciona se o usuario já estiver logado e clicar no link de confirmação
-@login_required
 def confirm(token):
-    s = Serializer()
-    if current_user.confirmed:
+    user_loged = Serializer.verify_auth_token(secret_key, token)
+    if user_loged.confirmed:
         return redirect(url_for('main.home'))    
-    if s.verify_auth_token(secret_key, token):
-        current_user.confirmed = True
-        db.session.add(current_user)
+    if Serializer.verify_auth_token(secret_key, token):
+        user_loged.confirmed = True
+        db.session.add(user_loged)
         db.session.commit()
         flash('Obrigado por confirmar seu email!')
         return redirect(url_for('main.home'))
