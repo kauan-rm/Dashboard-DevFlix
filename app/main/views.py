@@ -13,8 +13,7 @@ def index():
 @main.route("/home")
 @login_required
 @permission_required(Permission.USAR)
-@permission_required(Permission.ADMIN)
-
+#@permission_required(Permission.ADMIN) descomentar para testar a permissão de admin 
 def home(): 
     ROWS_PER_PAGE = 10
 
