@@ -1,7 +1,7 @@
 # Inicio import
 from app.main import main
 from flask_login import login_required
-from flask import render_template, request,g
+from flask import render_template, request
 from ..models import Imagem, Permission
 from app.main.decorators import permission_required
 # Termino import

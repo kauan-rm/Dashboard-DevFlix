@@ -37,31 +37,7 @@ class Serializer:
         )
         return token
 
-    @staticmethod
-    def confirm(secret_key:str, user_id:int, token:str, treshold=3600):
-        '''
-        Confirma o token gerado pelo método generate_token,
-        considerando treshold segundos de tolerância.
-        secret_key: str, chave utilizada nas configurações do app
-        user_id: int, id do usuário logado
-        token: str, token gerado anteriormente
-        treshold: int, segundos de tolerância para a validação da chave
-        (str, int, str, int) -> bool
-        '''
-        try:
-            data = jwt.decode(
-                token,
-                secret_key,
-                leeway=datetime.timedelta(seconds=treshold),
-                algorithms=["HS256"]
-            )
-        except:
-            return False
-
-        if data.get('confirm') != user_id:
-            return False
-        return True
-
+   
     @staticmethod
     def verify_auth_token(secret_key:str, token:str, treshold=3600):
         data = jwt.decode(

@@ -13,9 +13,9 @@
 
   <div class="content">
     <div class="justfy-content-center">
-      <h1 class="fs-2 ">Olá {{ user.name }}, seja bem vindo à DevFLIX!</h1><br>
-      <p class="text-muted">Para confirmar a sua conta, por favor clique no link abaixo:</p><br>
-      <a class="text-decoration-none" href="{{ url_for('auth.confirm', token=token, _external=True) }}">Confirmar conta!</a><br><br>
+      <div class="bg-dark pd-1"><h1 class="fs-2 text-white">Olá {{ user.name }}, seja bem vindo à DevFLIX!</h1></div>
+      <div class="bg-secundary pd-2"><p class="text-muted">Para confirmar a sua conta, por favor clique no link abaixo:</p></div>
+      <a class="text-decoration-none btn btn-success" href="{{ url_for('auth.confirm', token=token, _external=True) }}">Confirmar conta!</a><br><br>
       <h4 class="text-muted" >Atenciosamente,</h4><br>
       <p class="text-muted fw-bold" >Time DevFLIX.</p>
     </div>

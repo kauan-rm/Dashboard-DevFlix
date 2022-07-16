@@ -2,30 +2,40 @@
     <nav class="sb-sidenav accordion" style=" background-image: linear-gradient(to top left, #00001a, #182e54);"id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
-                <a class="nav-link" href="{{ url_for('main.index') }}">
-                    <div class="sb-nav-link-icon" style="color: white;"><i class="fas fa-solid fa-home"></i></div>
-                    <div style="color: white; margin: auto;">
-                        Home
-                    </div>
-                </a>                              
-                <a class="nav-link" href="{{ url_for('auth.login') }}">
-                    <div class="sb-nav-link-icon" style="color: white;"><i class="fas fa-solid fa-sign-in"></i></div>
-                    <div style="color: white; margin: auto;">
-                        Login
-                    </div>
-                </a>
-                <a class="nav-link" href="{{ url_for('auth.registro') }}">
-                    <div class="sb-nav-link-icon"  style="color: white;"><i class="fas fa-solid fa-user-plus"></i></div>
-                    <div style="color: white; margin: auto;">
-                        Registro
-                    </div>
-                </a>
-                <a class="nav-link" href="{{ url_for('auth.logout') }}">
-                    <div class="sb-nav-link-icon"  style="color: white;"><i class="fa-solid fa-arrow-right-from-bracket"></i></i></div>
-                    <div style="color: white; margin: auto;">
-                        Logout
-                    </div>
-                </a>
+                {% if current_user.is_authenticated: %}
+                    <a href="#" class="nav-link">
+                        <div class="sb-nav-link-icon" style="color: white;"><i class="fa-solid fa-user"></i></i></div>
+                        <h4 style="color: white; margin: auto;">{{current_user.nome}}</h4>
+                    </a>
+
+                    <a class="nav-link" href="{{ url_for('main.home') }}">
+                        <div class="sb-nav-link-icon" style="color: white;"><i class="fas fa-solid fa-home"></i></div>
+                        <div style="color: white; margin: auto;">
+                            Home
+                        </div>
+                    </a>                              
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                        <div class="sb-nav-link-icon"  style="color: white;"><i class="fa-solid fa-arrow-right-from-bracket"></i></i></div>
+                        <div style="color: white; margin: auto;">
+                            Logout
+                        </div>
+                    </a>
+                {% endif %}   
+                {% if not current_user.is_authenticated: %}   
+                    <a class="nav-link" href="{{ url_for('auth.login') }}">
+                        <div class="sb-nav-link-icon" style="color: white;"><i class="fas fa-solid fa-sign-in"></i></div>
+                        <div style="color: white; margin: auto;">
+                            Login
+                        </div>
+                    </a>
+                    
+                    <a class="nav-link" href="{{ url_for('auth.registro') }}">
+                        <div class="sb-nav-link-icon"  style="color: white;"><i class="fas fa-solid fa-user-plus"></i></div>
+                        <div style="color: white; margin: auto;">
+                            Registro
+                        </div>
+                    </a>
+                {% endif %} 
             </div>
         </div>
     </nav>
