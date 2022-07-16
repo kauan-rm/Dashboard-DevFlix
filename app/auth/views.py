@@ -7,6 +7,7 @@ from app.models import User
 from ..email import send_email 
 from flask_login import login_required, current_user, login_user, logout_user
 from app.serializer import Serializer
+import jwt
 secret_key = Config.SECRET_KEY
 # Termino Import
 
@@ -32,7 +33,7 @@ def registro():
 @auth.route('/do_register', methods=['POST']) # Rota de registro por post
 def do_register():
     if request.form:
-        if request.form['senha'] == request.form['conf_senha']:
+        if request.form['senha'] == request.form['conf_senha'] and request.form['email'] != '':
             user = User()
             user.nome = request.form['nome']
             user.sobrenome = request.form['sobrenome']
